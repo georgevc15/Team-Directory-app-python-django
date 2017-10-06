@@ -1,0 +1,1 @@
+web: sh -c "cd DirectoryApp && gunicorn DirectoryApp.wsgi"

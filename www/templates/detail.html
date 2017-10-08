@@ -10,17 +10,17 @@
 	</head>
 	<body>
 	 <main>
-			<h1>Directory app with django</h1>
-			{% for person in people %}
+			<h1>Detail page for {{ person.name }}</h1>
 				<section>	
-				<a href="/members/{{ person.slug }}">
 					<img src="{{ person.image }}"/>
-				</a>
 					<h2>{{ person.name }}</h2>
 					<p class="person-title">{{ person.title }}</p>
 					<p class="person-email">{{ person.email }}</p>
+					<p>{{ person.responsibilities }}</p>
+					<p >{{ person.bio }}</p>
+					<p >{{ person.github }}</p>
+					<p >{{ person.birthday }}</p>
 				</section>
-			{% endfor %}
 	 </main>
 	</body>
 	</html>

@@ -8,4 +8,5 @@ def index(request):
 	return render(request, 'index.html', {'people':people})
 
 def detail(request, slug):
-	pass
+	person = Person.objects.get(slug=slug)
+	return render(request, 'detail.html', {'person':person})

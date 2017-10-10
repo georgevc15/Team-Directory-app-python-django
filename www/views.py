@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Person
 from .forms import PersonForm
-
+from django.forms.models import model_to_dict
+from django.core.urlresolvers import reverse
 # Create your views here.
 
 def index(request):
@@ -14,5 +15,14 @@ def detail(request, slug):
 
 
 def edit(request, slug):
-	form = PersonForm()
-	return render(request, 'edit.html', {'form':form})
+	person = Person.objects.get(slug=slug)
+	if (request.method == 'POST'):
+		#process the form
+		form = PersonForm(data=request.POST, instance=person)
+		if form.is_valid():
+			form.save(commit = True)
+		return redirect(reverse('detail', args=[slug]))
+	else:
+		person_dict = model_to_dict(person)
+		form = PersonForm(person_dict)
+		return render(request, 'edit.html', {'form':form})

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from .models import Person
 from .forms import PersonForm
 from django.forms.models import model_to_dict
@@ -26,3 +27,11 @@ def edit(request, slug):
 		person_dict = model_to_dict(person)
 		form = PersonForm(person_dict)
 		return render(request, 'edit.html', {'form':form})
+
+def verify_email(backend, user, response, *args, **kwargs):
+	if backend.name == 'google-oauth2':
+		existing_person = Person.objects.get(email=kwargs.get('detail').get('email'))
+		if not existing_person:
+			return HttpResponse("You do not have access!")
+
+

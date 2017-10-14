@@ -7,8 +7,11 @@ from django.core.urlresolvers import reverse
 # Create your views here.
 
 def index(request):
-	people = Person.objects.all()
-	return render(request, 'index.html', {'people':people})
+	if request.user.is_authenticated():
+		people = Person.objects.all()
+		return render(request, 'index.html', {'people':people})
+	else:
+		return redirect('/login/google-oauth2')
 
 def detail(request, slug):
 	person = Person.objects.get(slug=slug)
@@ -30,7 +33,7 @@ def edit(request, slug):
 
 def verify_email(backend, user, response, *args, **kwargs):
 	if backend.name == 'google-oauth2':
-		existing_person = Person.objects.get(email=kwargs.get('detail').get('email'))
+		existing_person = Person.objects.filter(email=kwargs.get('details').get('email'))
 		if not existing_person:
 			return HttpResponse("You do not have access!")
 
